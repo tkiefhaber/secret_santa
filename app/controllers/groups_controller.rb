@@ -4,18 +4,8 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = Group.create
-    spreadsheet = open_spreadsheet(params[:file])
-    uploaded_users = spreadsheet.split('\n')
-    uploaded_users.each do |u|
-      splits = u.split(',')
-      @group.users.create(
-        first_name: splits[0],
-         last_name: splits[1],
-             email: splits[2],
-          password: random_password
-      )
-
-    end
+    Group.create_yourself(params[:group][:file])
+    flash[:notice] = 'emails will go out to participants shortly'
+    redirect_to :new
   end
 end

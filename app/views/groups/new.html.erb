@@ -1,0 +1,10 @@
+<h1>welcome to secret santa pairing</h1>
+<h3>upload a csv with all participants, we'll match them at random and email everyone who they're giving to</h3>
+<p>spreadsheet should have three columns: First Name, Last Name, Email Address</p>
+
+<label for="date">participants spreadsheet:</label>
+<%= form_for @group do |f| %>
+  <%= f.file_field :file %>
+
+  <%= f.submit "Import" %>
+<% end %>

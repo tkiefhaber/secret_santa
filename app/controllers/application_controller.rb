@@ -13,7 +13,4 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def random_password
-    #do random password here
-  end
 end
