@@ -4,20 +4,40 @@ class Group < ActiveRecord::Base
 
   def self.create_yourself(spreadsheet)
     group = Group.create
-    add_users(group, spreadsheet)
+    add_users(group, open_spreadsheet(spreadsheet))
     group.pair_up
+    group.deliver_emails
   end
 
   def self.add_users(group, spreadsheet)
-    spreadsheet = spreadsheet.open.read
-    uploaded_users = spreadsheet.split('\n')
+    uploaded_users = []
+    row_count = spreadsheet.column(1).count
+    (2..row_count).each do |row|
+      uploaded_users << spreadsheet.row(row)
+    end
     uploaded_users.each do |u|
-      splits = u.split(',')
       group.users.create(
-        first_name: splits[0],
-         last_name: splits[1],
-             email: splits[2],
+        first_name: u[0],
+         last_name: u[1],
+             email: u[2],
       )
+    end
+  end
+
+  def pair_up
+    used = []
+    users.each do |u|
+      usable = users.to_a - [u] - used
+      recipient = usable.sample
+      pairs.create(:giver_id => u.id, :receiver_id => recipient.id)
+      used << recipient
+    end
+  end
+
+  def deliver_emails
+    pairs.each do |p|
+      giver = User.find(p.giver_id)
+      GroupMailer.recipient_email(giver).deliver
     end
   end
 
@@ -25,7 +45,7 @@ class Group < ActiveRecord::Base
 
     def self.open_spreadsheet(file)
       case File.extname(file.original_filename)
-      when ".csv"   then Roo::Csv.new(file.path, nil)
+      when ".csv"   then Roo::Csv.new(file.path, nil, :ignore)
       when ".xls"   then Roo::Excel.new(file.path, nil, :ignore)
       when ".xlsx"  then Roo::Excelx.new(file.path, nil, :ignore)
       else
