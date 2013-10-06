@@ -5,7 +5,6 @@ class GroupsController < ApplicationController
 
   def create
     Group.create_yourself(params[:group][:file])
-    flash[:notice] = 'emails will go out to participants shortly'
-    redirect_to :new
+    redirect_to new_group_path, :flash => {:notice => 'emails will go out to participants shortly'}
   end
 end
