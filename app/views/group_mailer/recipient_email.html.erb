@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Hey there, <%= @giver.first_name %></h1>
+    <p>
+      You're participating in a secret santa. FUN!
+      The name of your recipient is: <%= @receiver.first_name %> <%= @receiver.last_name %>.<br/>
+      For reference, their email is <%= @receiver.email %>
+    </p>
+    <p>Thanks for playing and have a great day!</p>
+  </body>
+</html>
