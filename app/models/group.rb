@@ -37,7 +37,8 @@ class Group < ActiveRecord::Base
   def deliver_emails
     pairs.each do |p|
       giver = User.find(p.giver_id)
-      GroupMailer.recipient_email(giver).deliver
+      receiver = User.find(p.receiver_id)
+      GroupMailer.recipient_email(giver, receiver).deliver
     end
   end
 
