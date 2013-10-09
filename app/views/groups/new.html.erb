@@ -1,8 +1,10 @@
-<h1>welcome to secret santa pairing</h1>
-<h3>upload a csv with all participants, we'll match them at random and email everyone who they're giving to</h3>
-<p>spreadsheet should have three columns: First Name, Last Name, Email Address</p>
+<h1>covert christmas</h1>
+<h3>for large or distributed groups who want to secret santa</h3>
+<p>upload a csv with all participants, we'll match them at random and email everyone who they're giving to</p>
+<p>spreadsheet should have three columns with the following headers:</p>
+<p id="headers"><strong>First Name, Last Name, Email Address</strong></p>
 
-<label for="date">participants spreadsheet:</label>
+<label for="file" id='particpants'>participants spreadsheet:</label>
 <%= form_for @group do |f| %>
   <%= f.file_field :file %>
 

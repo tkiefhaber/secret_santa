@@ -11,3 +11,35 @@
  *= require_self
  *= require_tree .
  */
+
+body {
+  background-color: #A32C28;
+  color: #BCA875;
+  font-family: helvetica;
+  text-align: center;
+}
+
+h1 {
+  font-size: 9em;
+  margin: 5px;
+}
+
+h3 {
+  color: #384030;
+  font-size: 36px;
+  margin-top: -15px;
+}
+
+#headers {
+  color: #7B8055;
+  font-size: 24px;
+}
+
+
+#participants {
+  margin-bottom: 20px;
+}
+
+input {
+  margin-top: 15px;
+}
