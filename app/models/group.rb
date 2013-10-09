@@ -4,8 +4,9 @@ class Group < ActiveRecord::Base
 
   def self.create_yourself(spreadsheet)
     group = Group.create
-    add_users(group, open_spreadsheet(spreadsheet))
-    group.pair_up
+    spreadsheet = open_spreadsheet(spreadsheet)
+    add_users(group, spreadsheet)
+    group.pair_up(spreadsheet)
     group.deliver_emails
   end
 
@@ -24,13 +25,17 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def pair_up
+  def pair_up(spreadsheet)
     used = []
     users.each do |u|
       usable = users.to_a - [u] - used
-      recipient = usable.sample
-      pairs.create(:giver_id => u.id, :receiver_id => recipient.id)
-      used << recipient
+      if stymied?(usable)
+        reshuffle(spreadsheet)
+      else
+        recipient = usable.sample
+        pairs.create(:giver_id => u.id, :receiver_id => recipient.id)
+        used << recipient
+      end
     end
   end
 
@@ -43,6 +48,15 @@ class Group < ActiveRecord::Base
   end
 
   private
+
+    def stymied?(usable)
+      pairs.count < users.count && usable.empty?
+    end
+
+    def reshuffle(spreadsheet)
+      pairs.destroy_all
+      pair_up(spreadsheet)
+    end
 
     def self.open_spreadsheet(file)
       case File.extname(file.original_filename)
