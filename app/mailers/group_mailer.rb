@@ -1,5 +1,5 @@
 class GroupMailer < ActionMailer::Base
-  default from: "santaslittlehelper@secretsanta.com"
+  default from: "app18565578@heroku.com"
 
   def recipient_email(giver, receiver)
     @giver = giver
