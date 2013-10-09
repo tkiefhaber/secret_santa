@@ -4,7 +4,7 @@ class GroupsController < ApplicationController
   end
 
   def create
-    if params[:group][:file]
+    if params[:group] && params[:group][:file]
       Group.create_yourself(params[:group][:file])
       redirect_to new_group_path, :flash => {:notice => 'emails will go out to participants shortly'}
     else
