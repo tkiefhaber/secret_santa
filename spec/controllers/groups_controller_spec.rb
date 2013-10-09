@@ -14,5 +14,17 @@ describe GroupsController do
         expect(flash[:notice]).to eq("emails will go out to participants shortly")
       end
     end
+
+    context 'csv_file is not uploaded' do
+
+      before do
+        post :create, :group => {}
+      end
+
+      it "redirects with a flash message" do
+        expect(response).to redirect_to(new_group_path)
+        expect(flash[:warning]).to eq("you forgot to upload a file, silly. try again.")
+      end
+    end
   end
 end
