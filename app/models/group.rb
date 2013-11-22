@@ -1,71 +1,49 @@
 class Group < ActiveRecord::Base
-  has_many :users
+  has_one :spreadsheet
   has_many :pairs
+  has_many :users, through: :spreadsheet
 
-  def self.create_yourself(spreadsheet)
+  def self.create_yourself(file)
     group = Group.create
-    spreadsheet = open_spreadsheet(spreadsheet)
-    add_users(group, spreadsheet)
-    group.pair_up(spreadsheet)
+    group.spreadsheet = Spreadsheet.create(group: group)
+    group.spreadsheet.add_users(file)
+    group.pair_up
     group.deliver_emails
   end
 
-  def self.add_users(group, spreadsheet)
-    uploaded_users = []
-    row_count = spreadsheet.column(1).count
-    (2..row_count).each do |row|
-      uploaded_users << spreadsheet.row(row)
-    end
-    uploaded_users.each do |u|
-      group.users.create(
-        first_name: u[0],
-         last_name: u[1],
-             email: u[2],
-      )
-    end
-  end
-
-  def pair_up(spreadsheet)
-    used = []
+  def pair_up
+    @used = []
+    @all_users = users.load
     users.each do |u|
-      usable = users.to_a - [u] - used
+      usable = users_available_for(u)
       if stymied?(usable)
-        reshuffle(spreadsheet)
+        reshuffle
       else
         recipient = usable.sample
-        pairs.create(:giver_id => u.id, :receiver_id => recipient.id)
-        used << recipient
+        pairs.create(giver: u, receiver: recipient)
+        @used << recipient
       end
     end
   end
 
   def deliver_emails
     pairs.each do |p|
-      giver = User.find(p.giver_id)
-      receiver = User.find(p.receiver_id)
-      GroupMailer.recipient_email(giver, receiver).deliver
+      GroupMailer.recipient_email(p.giver, p.receiver).deliver
     end
   end
 
   private
 
+    def users_available_for(user)
+      @all_users - user.verboten_people - @used
+    end
+
     def stymied?(usable)
       pairs.count < users.count && usable.empty?
     end
 
-    def reshuffle(spreadsheet)
+    def reshuffle
       pairs.destroy_all
-      pair_up(spreadsheet)
+      pair_up
     end
-
-    def self.open_spreadsheet(file)
-      case File.extname(file.original_filename)
-      when ".csv"   then Roo::Csv.new(file.path, nil, :ignore)
-      when ".xls"   then Roo::Excel.new(file.path, nil, :ignore)
-      when ".xlsx"  then Roo::Excelx.new(file.path, nil, :ignore)
-      else
-        raise "Unknown file type: #{file.original_filename}"
-      end
-    end
-
 end
