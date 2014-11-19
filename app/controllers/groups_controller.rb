@@ -11,4 +11,5 @@ class GroupsController < ApplicationController
       redirect_to new_group_path, :flash => {:warning => 'you forgot to upload a file, silly. try again.'}
     end
   end
+
 end

@@ -35,7 +35,7 @@ class Group < ActiveRecord::Base
   private
 
     def users_available_for(user)
-      @all_users - user.verboten_people - @used
+      @all_users - user.forbidden_people - @used
     end
 
     def stymied?(usable)

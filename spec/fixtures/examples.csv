@@ -1,5 +1,6 @@
-first name,last name,email address
-tom,kiefhaber,tkiefhab@gmail.com
-jenni,kiefhaber,tkiefhab@gmail.com
-jan,kiefhaber,tkiefhab@gmail.com
-dad,kiefhaber,tkiefhab@gmail.com
+first name,last name,email address,forbidden person
+tom,kiefhaber,tkiefhab@gmail.com,tom.kiefhaber@livingsocial.com
+jenni,kiefhaber,tom.kiefhaber@livingsocial.com,tkiefhab@gmail.com
+jan,kiefhaber,drkiefhaber@mac.com,tom.kiefhaber@hungrymachine.com
+dad,kiefhaber,tom.kiefhaber@hungrymachine.com,drkiefhaber@mac.com
+will,wheat,test@example.com,

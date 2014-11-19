@@ -43,9 +43,9 @@ p {
   text-align: left;
 }
 
-#headers {
+a {
   color: #7B8055;
-  font-size: 2em;
+  font-size: 1em;
   margin-top: 10px;
   text-align: center;
 }

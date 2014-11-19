@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   belongs_to :spreadsheet
 
-  def verboten_people
-    [self]
+  def forbidden_people
+    User.where(email: verboten_people.split(',').strip)
   end
+
 end

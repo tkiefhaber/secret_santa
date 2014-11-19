@@ -11,9 +11,10 @@ class Spreadsheet < ActiveRecord::Base
     end
     uploaded_users.each do |u|
       users.create(
-        first_name: u[0],
-         last_name: u[1],
-             email: u[2],
+            first_name: u[0],
+             last_name: u[1],
+                 email: u[2],
+       verboten_people: [u[2], u[3]].join(',')
       )
     end
   end
